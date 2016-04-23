@@ -9,6 +9,6 @@
 用户中心-OAuth2.0将OAuth2.0与开源框架相结合，提供便捷的统一身份认证。
 
 目前已集成的有：
-* **wordpress** 说明：[readme]()
+* **wordpress** ：[readme](https://github.com/yaoshanliang/ucenter-oauth/tree/master/wordpress)
 
 
