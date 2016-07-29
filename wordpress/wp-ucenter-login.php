@@ -10,6 +10,8 @@ define('UCENTER_HOME', 'http://ucenter.szjlxh.com');//用户中心地址
 define('UCENTER_OAUTH', UCENTER_HOME . '/oauth');
 define('UCENTER_API', UCENTER_HOME . '/api');
 
+define('SUCCESS', 0);
+
 if(isset($_GET['code'])){
     ucenter_oauth();
 }
@@ -24,7 +26,7 @@ function ucenter_oauth() {
         'code' => $_GET['code']);
     $response = wp_remote_post($url, array('method' => 'POST', 'body' => $data));
     $data = json_decode($response['body'], true);
-    if(1 !== $data['code']) {
+    if(SUCCESS !== $data['code']) {
         wp_die('授权失败');
     }
     $access_token = $data['data']['access_token'];
@@ -33,7 +35,7 @@ function ucenter_oauth() {
     $url = UCENTER_API . '/user/?access_token=' . $access_token;
     $data = wp_remote_get($url);
     $data = json_decode($data['body'], true);
-    if(1 !== $data['code']) {
+    if(SUCCESS !== $data['code']) {
         wp_die('获取用户信息失败');
     }
     $username = $data['data']['username'];
