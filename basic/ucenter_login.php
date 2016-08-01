@@ -5,6 +5,7 @@ define('CLIENT_ID', '');// 应用ID，需要申请
 define('CLIENT_SECRET', '');// 应用密钥，需要申请
 define('REDIRECT_URI', '');// 回调地址
 define('UCENTER_HOME', 'http://ucenter.szjlxh.com');// 用户中心地址
+define('CLIENT_HOME', '/');// 应用登陆后主页
 
 define('UCENTER_OAUTH', UCENTER_HOME . '/oauth');
 define('UCENTER_API', UCENTER_HOME . '/api');
@@ -47,7 +48,7 @@ function ucenter_oauth() {
     $username = $data['data']['username'];
     $user_id = $data['data']['user_id'];
 
-    header('Location: ' . '/');
+    header('Location: ' . CLIENT_HOME);
     exit;
 }
 
