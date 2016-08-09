@@ -52,11 +52,6 @@ switch ($ACT) {
         break;
 }
 
-if ($ACT === 'login') {
-
-} else if ($ACT === 'logout') {
-}
-
 function ucenter_oauth()
 {
     // 获取access_token
