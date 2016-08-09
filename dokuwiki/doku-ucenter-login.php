@@ -32,13 +32,9 @@ switch ($ACT) {
             header("Location: " . ucenter_oauth_url());
             exit;
         } else { // fetch authenticated user data and log in local application
-            $url = UCENTER_API . '/user/?access_token=' . $_SESSION['access_token'];
-            $data = json_decode(ucenter_curl($url), true);
-            if (SUCCESS !== $data['code']) {
-                exit('授权失败');
-            }
-
-            localLogin($data['data']);
+            $user = fetchUser();
+            $roles = fetchRoles();
+            localLogin($user, $roles);
         }
 
         act_redirect('', '');
@@ -50,6 +46,11 @@ switch ($ACT) {
         header("Location: " . ucenter_oauth_url());
         exit;
         break;
+}
+
+if ($ACT === 'login') {
+
+} else if ($ACT === 'logout') {
 }
 
 function ucenter_oauth()
@@ -67,6 +68,26 @@ function ucenter_oauth()
     }
     $access_token = $data['data']['access_token'];
     $_SESSION['access_token'] = $access_token;
+}
+
+function fetchUser()
+{
+    $url = UCENTER_API . '/user/?access_token=' . $_SESSION['access_token'];
+    $data = json_decode(ucenter_curl($url), true);
+    if (SUCCESS !== $data['code']) {
+        exit('获取用户失败');
+    }
+    return $data['data'];
+}
+
+function fetchRoles()
+{
+    $url = UCENTER_API . '/user/role?access_token=' . $_SESSION['access_token'];
+    $data = json_decode(ucenter_curl($url), true);
+    if (SUCCESS !== $data['code']) {
+        exit('获取角色失败');
+    }
+    return $data['data']['roles'];
 }
 
 // curl请求
@@ -91,18 +112,18 @@ function ucenter_oauth_url()
     return UCENTER_OAUTH . '/authorize?client_id=' . CLIENT_ID . '&response_type=code&redirect_uri=' . urlencode(REDIRECT_URI);
 }
 
-function localLogin($data)
+function localLogin($user, $roles)
 {
     /* @var DokuWiki_Auth_Plugin $auth */
     global $auth;
     global $INPUT;
     global $AUTH_ACL;
 
-    if ($auth->getUserData($data['user_id'], 'no-password') !== false ||
-        $auth->createUser($data['user_id'], 'no-password', $data['username'], $data['email'])
+    if ($auth->getUserData($user['user_id'], 'no-password') !== false ||
+        $auth->createUser($user['user_id'], 'no-password', $user['username'], $user['email'], array_column($roles, 'name'))
     ) {
         auth_login_wrapper([
-            'user' => $data['user_id'],
+            'user' => $user['user_id'],
             'password' => 'no-password',
             'sticky' => false,
             'silent' => $INPUT->bool('http_credentials')
