@@ -14,5 +14,6 @@
 * **wordpress** ：[readme](https://github.com/yaoshanliang/ucenter-oauth/tree/master/wordpress)
 * **phpMyAdmin** ：[readme](https://github.com/yaoshanliang/ucenter-oauth/tree/master/phpMyAdmin)
 * **dokuwiki** ：[readme](https://github.com/yaoshanliang/ucenter-oauth/tree/master/dokuwiki)
+* **phpRedisAdmin** ：[readme](https://github.com/yaoshanliang/ucenter-oauth/tree/master/phpRedisAdmin)
 
 
